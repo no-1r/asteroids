@@ -2,6 +2,8 @@ import pygame
 from constants import *
 from circleshape import *
 from asteroid import *
+
+
 class CircleShape(pygame.sprite.Sprite):
 
     def __init__(self, x, y, radius):
@@ -35,10 +37,9 @@ class CircleShape(pygame.sprite.Sprite):
 class Player(CircleShape):
     def __init__(self, x, y, radius, shots_group):
         super().__init__(x, y, PLAYER_RADIUS)
-        self.shots_group = shots_group
-
+        self.shots_group = shots_group 
         self.rotation = 0
-
+        self.timer = 0
 
 
     def triangle(self):
@@ -70,16 +71,23 @@ class Player(CircleShape):
         if keys[pygame.K_SPACE]:
             self.shoot()
 
+    
+        self.timer = self.timer - dt
+
     def move(self, dt):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
         self.position += forward * PLAYER_SPEED * dt
 
 
     def shoot(self):
-        new_shot = Shot(self.position.x, self.position.y, SHOT_RADIUS)
-        shot_velocity = pygame.Vector2(0,1)
-        shot_velocity = shot_velocity.rotate(self.rotation)
-        shot_velocity = shot_velocity * PLAYER_SHOOT_SPEED
+        if self.timer <= 0:    
+            new_shot = Shot(self.position.x, self.position.y, SHOT_RADIUS)
+            shot_velocity = pygame.Vector2(0,1)
+            shot_velocity = shot_velocity.rotate(self.rotation)
+            shot_velocity = shot_velocity * PLAYER_SHOOT_SPEED
 
-        new_shot.velocity = shot_velocity
-        self.shots_group.add(new_shot)
+            new_shot.velocity = shot_velocity
+            self.shots_group.add(new_shot)
+            self.timer = PLAYER_SHOOT_COOLDOWN
+
+    
