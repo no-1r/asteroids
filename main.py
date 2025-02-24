@@ -18,7 +18,7 @@ def main():
     dt = 0
 
     updatable = pygame.sprite.Group()
-    drawable = pygame.sprite.Group()
+    drawable = pygame.sprite.Group() 
     asteroids = pygame.sprite.Group()
     shots_group = pygame.sprite.Group()
 
